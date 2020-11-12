@@ -5,4 +5,4 @@
 [![Build Status](https://github.com/fgerick/CartesianSphericalHarmonics.jl/workflows/CI/badge.svg)](https://github.com/fgerick/CartesianSphericalHarmonics.jl/actions)
 [![Coverage](https://codecov.io/gh/fgerick/CartesianSphericalHarmonics.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/fgerick/CartesianSphericalHarmonics.jl)
 
-Adapted from 
+Adapted from [SphericalHarmonicExpansions.jl](https://github.com/hofmannmartin/SphericalHarmonicExpansions.jl)!
