@@ -1,7 +1,9 @@
 module CartesianSphericalHarmonics
 
 # Write your package code here.
-using LinearAlgebra, Reexport
+using LinearAlgebra
+using Reexport
+
 @reexport using MultivariatePolynomials
 @reexport using TypedPolynomials
 
