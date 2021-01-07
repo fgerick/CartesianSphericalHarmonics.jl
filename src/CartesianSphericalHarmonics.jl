@@ -128,3 +128,5 @@ function rlm(l::Integer, m::Integer, x::Variable, y::Variable, z::Variable;
 
 	return polynomial(tout)
 end
+
+end
