@@ -21,7 +21,11 @@ function ylmcoeff(N::Schmidt{T},l::Integer, m::Integer) where T
 	for i in (l-m+1):(l+m)
 	  k *= i
 	end
-	return sqrt(1/k)
+	fac = sqrt(1/k)
+	if m==0
+		fac*=sqrt(2*one(T))
+	end
+	return fac
 end
 
 function ylmcoeff(N::Laplace{T}, l::Integer, m::Integer) where T
@@ -85,7 +89,7 @@ function ylm(l::Integer, m::Integer, x::Variable, y::Variable, z::Variable;
 			 norm::YLMNorm{T}=Nonorm{Rational{Int}}(),real::Bool=true) where T
 
 	if abs(m) > l
-	throw(DomainError(m,"-l <= m <= l expected, but m = $m and l = $l."))
+		throw(DomainError(m,"-l <= m <= l expected, but m = $m and l = $l."))
 	end
 
 	p = (z^2 - 1)^l
@@ -99,17 +103,9 @@ function ylm(l::Integer, m::Integer, x::Variable, y::Variable, z::Variable;
 
 	if real
 		if m > 0
-			out = ylmcoeff(norm, l, m)*cossinpoly(m,x,y)*p
-			if norm != Nonorm{T}()
-				out *= sqrt(2one(T))
-			end
-			return out
+			return ylmcoeff(norm, l, m)*cossinpoly(m,x,y)*p
 		elseif m < 0
-			out = ylmcoeff(norm, l, abs(m))*sinsinpoly(abs(m),x,y)*p
-			if norm != Nonorm{T}()
-				out *= sqrt(2one(T))
-			end
-			return out
+			return ylmcoeff(norm, l, abs(m))*sinsinpoly(abs(m),x,y)*p
 		else
 			return ylmcoeff(norm, l, 0)*p
 		end
@@ -119,28 +115,16 @@ function ylm(l::Integer, m::Integer, x::Variable, y::Variable, z::Variable;
 end
 
 # multiplying r^l*ylm(x,y,z)
-function rlylm(l::Integer, m::Integer, x::Variable, y::Variable, z::Variable;
+function rlm(l::Integer, m::Integer, x::Variable, y::Variable, z::Variable;
 			   norm::YLMNorm{T}=Nonorm{Rational{Int}}(),real::Bool=true) where T
 	p = ylm(l,m,x,y,z;norm=norm,real=real)
 	tout = []
-	# Zerlegung des Polynoms in Terme:
+
 	for t in terms(p)
-		deg = degree(monomial(t)) # Gibt den gesamten Grad des Monoms an
-		degR = l-deg # durch das Kürzen ergibt sich ein Grad von l-deg fuer r
-		push!(tout,(x^2+y^2+z^2)^div(degR,2)*t) # r² wird durch x²+y²+z² ersetzt
+		deg = degree(monomial(t)) # degree of monomial
+		degR = l-deg # degree of r: l-deg
+		push!(tout,(x^2+y^2+z^2)^div(degR,2)*t) # r² replaced by x²+y²+z²
 	end
 
 	return polynomial(tout)
-end
-
-# solid harmonics
-function rlm(l::Integer, m::Integer, x::Variable, y::Variable, z::Variable;
-			 norm::YLMNorm{T}=Nonorm{Rational{Int}}(),real::Bool=true) where T
-	rlm = rlylm(l,m,x,y,z; norm=norm,real=real)
-	if norm != Nonorm{T}()
-		rlm = sqrt(4one(T)*T(pi)/(2*l+1))*rlm
-	end
-	return rlm
-end
-
 end
