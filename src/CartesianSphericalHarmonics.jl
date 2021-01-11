@@ -24,7 +24,7 @@ function ylmcoeff(N::Schmidt{T},l::Integer, m::Integer) where T
 	  k *= i
 	end
 	fac = sqrt(1/k)
-	if m==0
+	if m!=0
 		fac*=sqrt(2*one(T))
 	end
 	return fac
