@@ -71,6 +71,18 @@ function sinsinpoly(m::Integer, x::Variable, y::Variable)
   return sum
 end
 
+#
+function legendre_assoc(::Type{T},z,l,m) where T
+	p = (z^2 - 1)^l
+
+	for i = 1:l+abs(m)
+	c = i <= l ? 1/(2one(T)*i) : one(T)
+	p = c*differentiate(p, z)
+	end
+
+	p *= (-1)^m
+	return p
+end
 # #legendre polynomial:
 # P(l::BigInt,x) = differentiate((x^2 - 1)^l,x,l)
 #
@@ -94,14 +106,15 @@ function ylm(l::Integer, m::Integer, x::Variable, y::Variable, z::Variable;
 		throw(DomainError(m,"-l <= m <= l expected, but m = $m and l = $l."))
 	end
 
-	p = (z^2 - 1)^l
+	p = legendre_assoc(T,z,l,m)
+	# p = (z^2 - 1)^l
 
-	for i = 1:l+abs(m)
-	  c = i <= l ? 1/(2one(T)*i) : one(T)
-	  p = c*differentiate(p, z)
-	end
+	# for i = 1:l+abs(m)
+	#   c = i <= l ? 1/(2one(T)*i) : one(T)
+	#   p = c*differentiate(p, z)
+	# end
 
-	p *= (-1)^m
+	# p *= (-1)^m
 
 	if real
 		if m > 0
