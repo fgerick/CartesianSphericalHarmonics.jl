@@ -51,7 +51,7 @@ end
 
 
 
-function cossinpoly(m::Integer, x::Variable, y::Variable)
+function cossinpoly(m::Integer, x, y)
 
   sum = zero(x*y)
   for j in 0:div(m,2)
@@ -61,7 +61,7 @@ function cossinpoly(m::Integer, x::Variable, y::Variable)
   return sum
 end
 
-function sinsinpoly(m::Integer, x::Variable, y::Variable)
+function sinsinpoly(m::Integer, x, y)
 
   sum = zero(x*y)
   for j in 0:div((m-1),2)
