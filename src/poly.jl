@@ -42,7 +42,7 @@ function cossinpoly(m::Integer, x, y)
   *Output:*  Spherical harmonic polynomial
   """
   function ylm(l::Integer, m::Integer, x::Variable, y::Variable, z::Variable;
-               norm::Type{YLMNorm{T}} = Nonorm{Rational{Int}}, real::Bool=true) where T
+               norm::Type{TN} = Nonorm{Rational{Int}}, real::Bool=true) where {T, TN<:YLMNorm{T}}
   
       if abs(m) > l
           throw(DomainError(m,"-l <= m <= l expected, but m = $m and l = $l."))
@@ -75,7 +75,7 @@ function cossinpoly(m::Integer, x, y)
   *Output:*  Solid spherical harmonic polynomial
   """
   function rlm(l::Integer, m::Integer, x::Variable, y::Variable, z::Variable;
-                 norm::Type{YLMNorm{T}} = Nonorm{Rational{Int}}, real::Bool=true) where T
+                 norm::Type{TN} = Nonorm{Rational{Int}}, real::Bool=true) where {T,TN<:YLMNorm{T}}
       p = ylm(l,m,x,y,z; norm=norm, real=real)
       tout = []
   
