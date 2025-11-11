@@ -59,7 +59,10 @@ function cossinpoly(m::Integer, x, y)
               return ylmcoeff(norm, l, 0)*p
           end
       else
-          return ylmcoeff(norm, l, m)*(cossinpoly(m,x,y)+im*sinsinpoly(m,x,y))*p
+          X = cossinpoly(abs(m),x,y)
+          Y = sinsinpoly(abs(m),x,y)
+          Z = m < 0 ? X-im*Y : X+im*Y
+          return ylmcoeff(norm, l, abs(m))*Z*p
       end
   end
   
